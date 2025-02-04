@@ -1,23 +1,26 @@
 import React, { useState } from 'react'
-import { v4 as uuidv4 } from 'uuid'  // Ensure you installed the "uuid" package
+import { v4 as uuidv4 } from 'uuid'
 
 function AddContact({ addContact }) {
-  const [name, setName] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
   const [phone, setPhone] = useState('')
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (name.trim() === '' || phone.trim() === '') {
+    if (firstName.trim() === '' || lastName.trim() === '' || phone.trim() === '') {
       alert('Please fill in both fields.')
       return
     }
     const newContact = {
       id: uuidv4(),
-      name,
+      firstName,
+      lastName,
       phone
     }
     addContact(newContact)
-    setName('')
+    setFirstName('')
+    setLastName('')
     setPhone('')
   }
 
@@ -25,12 +28,18 @@ function AddContact({ addContact }) {
     <form onSubmit={handleSubmit} className="add-contact-form">
       <input 
         type="text" 
-        placeholder="Name" 
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        placeholder="First Name" 
+        value={firstName}
+        onChange={(e) => setFirstName(e.target.value)}
       />
       <input 
         type="text" 
+        placeholder="Last Name" 
+        value={lastName}
+        onChange={(e) => setLastName(e.target.value)}
+      />
+      <input 
+        type="number" 
         placeholder="Phone Number" 
         value={phone}
         onChange={(e) => setPhone(e.target.value)}
