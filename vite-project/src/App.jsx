@@ -1,34 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useEffect } from 'react'
 import './App.css'
+import AddContact from './components/AddContact'
+import ContactList from './components/ContactList'
+
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [contacts, setContacts] = useState([])
+
+  // Load contacts from localStorage when the component mounts
+  useEffect(() => {
+    const storedContacts = localStorage.getItem('contacts')
+    if (storedContacts) {
+      setContacts(JSON.parse(storedContacts))
+    }
+  }, [])
+
+  // Save contacts to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('contacts', JSON.stringify(contacts))
+  }, [contacts])
+
+  const addContact = (contact) => {
+    setContacts([...contacts, contact])
+  }
+
+  const deleteContact = (id) => {
+    setContacts(contacts.filter(contact => contact.id !== id))
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className="app-container">
+      <h1>Phonebook Contact App</h1>
+      <AddContact addContact={addContact} />
+      <ContactList contacts={contacts} deleteContact={deleteContact} />
+    </div>
   )
 }
 
